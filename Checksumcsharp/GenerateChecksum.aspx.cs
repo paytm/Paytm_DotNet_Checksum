@@ -14,9 +14,15 @@ public partial class GenerateChecksum : System.Web.UI.Page
                 string paytmChecksum = "";
                 foreach (string key in Request.Form.Keys)
                 {
+                    // below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
+                    if (Request.Form[key].Trim().ToUpper().Contains("REFUND"))
+                    {
+                        parameters.Clear();
+                        return;
+                    }
                     parameters.Add(key.Trim(), Request.Form[key].Trim());
                 }
-
+                
                 paytmChecksum = CheckSum.generateCheckSum(PaytmConstants.MERCHANT_KEY, parameters);
 
                 if (parameters.ContainsKey("ORDER_ID") && parameters.ContainsKey("MID"))
