@@ -6,11 +6,18 @@ Partial Public Class GenerateChecksum
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs)
         If Request.Form.AllKeys.Length > 0 Then
             Try
+                
                 Dim parameters As New Dictionary(Of String, String)()
                 Dim paytmChecksum As String = ""
                 For Each key As String In Request.Form.Keys
+                'below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
+                    If Request.Form(key).Trim().ToUpper().Contains("REFUND") Then
+                        parameters.Clear()
+                        Return
+                    End If
                     parameters.Add(key.Trim(), Request.Form(key).Trim())
-                Next
+                Next    
+            
 
                 paytmChecksum = CheckSum.generateCheckSum(PaytmConstants.MERCHANT_KEY, parameters)
 
