@@ -11,16 +11,28 @@ public partial class GenerateChecksum : System.Web.UI.Page
             try
             {
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("MID", "");
+                parameters.Add("ORDER_ID", "");
+                parameters.Add("CUST_ID", "");
+                parameters.Add("CHANNEL_ID", "");
+                parameters.Add("INDUSTRY_TYPE_ID", "");
+                parameters.Add("WEBSITE", "");
+                parameters.Add("TXN_AMOUNT", "");
+                
                 string paytmChecksum = "";
                 foreach (string key in Request.Form.Keys)
                 {
                     // below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
                     if (Request.Form[key].Trim().ToUpper().Contains("REFUND"))
                     {
-                        parameters.Clear();
-                        return;
+                        continue;
                     }
-                    parameters.Add(key.Trim(), Request.Form[key].Trim());
+
+                    if ( parameters.ContainsKey(key.Trim()) ) {
+                        parameters[key.Trim()] = Request.Form[key].Trim();
+                    }else{
+                        parameters.Add(key.Trim(), Request.Form[key].Trim());
+                    }
                 }
                 
                 paytmChecksum = CheckSum.generateCheckSum(PaytmConstants.MERCHANT_KEY, parameters);

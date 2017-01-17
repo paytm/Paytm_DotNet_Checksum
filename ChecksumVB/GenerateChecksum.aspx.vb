@@ -9,16 +9,26 @@ Partial Public Class GenerateChecksum
                 
                 Dim parameters As New Dictionary(Of String, String)()
                 Dim paytmChecksum As String = ""
+                parameters.Add("MID", "")
+                parameters.Add("ORDER_ID", "")
+                parameters.Add("CUST_ID", "")
+                parameters.Add("CHANNEL_ID", "")
+                parameters.Add("INDUSTRY_TYPE_ID", "")
+                parameters.Add("WEBSITE", "")
+                parameters.Add("TXN_AMOUNT", "")
                 For Each key As String In Request.Form.Keys
                 'below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
                     If Request.Form(key).Trim().ToUpper().Contains("REFUND") Then
-                        parameters.Clear()
-                        Return
+                        Continue
                     End If
-                    parameters.Add(key.Trim(), Request.Form(key).Trim())
+
+                    If parameters.ContainsKey(key.Trim()) Then
+                        parameters[key.Trim()] = Request.Form[key].Trim()
+                    Else
+                        parameters.Add(key.Trim(), Request.Form(key).Trim())
+                    End If
                 Next    
             
-
                 paytmChecksum = CheckSum.generateCheckSum(PaytmConstants.MERCHANT_KEY, parameters)
 
                 If parameters.ContainsKey("ORDER_ID") AndAlso parameters.ContainsKey("MID") AndAlso parameters("MID") = PaytmConstants.MID Then
