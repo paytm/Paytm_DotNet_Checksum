@@ -9,26 +9,23 @@ Partial Public Class GenerateChecksum
                 
                 Dim parameters As New Dictionary(Of String, String)()
                 Dim paytmChecksum As String = ""
-                parameters.Add("MID", "")
-                parameters.Add("ORDER_ID", "")
-                parameters.Add("CUST_ID", "")
-                parameters.Add("CHANNEL_ID", "")
-                parameters.Add("INDUSTRY_TYPE_ID", "")
-                parameters.Add("WEBSITE", "")
-                parameters.Add("TXN_AMOUNT", "")
-                For Each key As String In Request.Form.Keys
-                'below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
-                    If Request.Form(key).Trim().ToUpper().Contains("REFUND") Then
-                        Continue
-                    End If
+                parameters.Add("MID", "xxxxxxx") 'Provided by Paytm
+                parameters.Add("ORDER_ID", "ORDER000001") 'unique OrderId For every request
+                parameters.Add("CUST_ID", "CUST00001") ' unique customer identifier 
+                parameters.Add("CHANNEL_ID", "WAP") 'Provided by Paytm
+                parameters.Add("INDUSTRY_TYPE_ID", "xxxxxxx") 'Provided by Paytm
+                parameters.Add("WEBSITE", "xxxxxxx") 'Provided by Paytm
+                parameters.Add("TXN_AMOUNT", "1.00") 'transaction amount
+                parameters.Add("CALLBACK_URL", "https://xxxx.xx/paytmCallback.jsp") 'Provided by Paytm
+                parameters.Add("EMAIL", "abc@gmail.com") 'customer email id
+                parameters.Add("MOBILE_NO", "9999999999") 'customer 10 digit mobile no.
 
-                    If parameters.ContainsKey(key.Trim()) Then
-                        parameters[key.Trim()] = Request.Form[key].Trim()
-                    Else
-                        parameters.Add(key.Trim(), Request.Form(key).Trim())
+                For Each key As String In parameters.Keys
+                    If parameters(key).Contains("|") Or parameters(key).ToUpper().Contains("REFUND") Then
+                        parameters(key) = ""
                     End If
-                Next    
-            
+                Next
+
                 paytmChecksum = CheckSum.generateCheckSum(PaytmConstants.MERCHANT_KEY, parameters)
 
                 If parameters.ContainsKey("ORDER_ID") AndAlso parameters.ContainsKey("MID") AndAlso parameters("MID") = PaytmConstants.MID Then
