@@ -16,7 +16,14 @@ public partial class VerifyChecksum : System.Web.UI.Page
 
                 foreach (string key in Request.Form.Keys)
                 {
-                    parameters.Add(key.Trim(), Request.Form[key].Trim());
+                    if (Request.Form[key].Contains("|"))
+			{
+			    parameters.Add(key.Trim(), "");
+			}
+			else
+			{
+			    parameters.Add(key.Trim(), Request.Form[key].Trim());
+			}
                 }
 
 
