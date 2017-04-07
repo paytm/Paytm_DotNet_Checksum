@@ -10,8 +10,12 @@ Partial Public Class VerifyChecksum
             Try
                 Dim paytmChecksum As String = "", responseString As String = ""
 
-                For Each key As String In Request.Form.Keys
-                    parameters.Add(key.Trim(), Request.Form(key).Trim())
+		For Each key As String In Request.Form.Keys
+                    If Request.Form(key).Contains("|") Then
+                        parameters.Add(key.Trim(), "")
+                    Else
+                        parameters.Add(key.Trim(), Request.Form(key).Trim())
+                    End If
                 Next
 
 
