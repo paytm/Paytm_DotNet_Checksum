@@ -23,7 +23,7 @@ public partial class GenerateChecksum : System.Web.UI.Page
                 foreach (string key in Request.Form.Keys)
                 {
                     // below code snippet is mandatory, so that no one can use your checksumgeneration url for other purpose .
-                    if (Request.Form[key].Trim().ToUpper().Contains("REFUND"))
+                    if (Request.Form[key].Trim().ToUpper().Contains("REFUND") || Request.Form[key].Trim().Contains("|"))
                     {
                         continue;
                     }
