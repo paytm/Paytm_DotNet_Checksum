@@ -1,2 +1,2 @@
 # Checksum - .net Language
-* More Details: **https://developer.paytm.com/docs/checksum/#net**
+* More Details: **https://business.paytm.com/docs/checksum/#net**
